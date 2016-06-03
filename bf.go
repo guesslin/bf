@@ -1,7 +1,9 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"io/ioutil"
 )
 
 func brainf(bfs string) {
@@ -39,6 +41,19 @@ func brainf(bfs string) {
 }
 
 func main() {
-	helloWorld := "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>."
-	brainf(helloWorld)
+	srcFile := flag.String("file", "", "bf source file")
+	stdin := flag.Bool("stdin", false, "Get bf code from stdin")
+	flag.Parse()
+	if *stdin {
+		var bfs string
+		fmt.Scanln(&bfs)
+		brainf(bfs)
+	} else {
+		bfs, err := ioutil.ReadFile(*srcFile)
+		if err != nil {
+			fmt.Printf("BF File Read Error %v\n", err)
+			return
+		}
+		brainf(string(bfs))
+	}
 }
